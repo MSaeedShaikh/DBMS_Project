@@ -1,0 +1,23 @@
+{%extends 'base.html'%}
+{% load static %}
+
+{%block content%}
+{% if u_id == -1 %}
+<div class="col-md-6 offset-md-3">
+<h1>Login</h1>
+<br/>
+<form method="POST" action="{% url 'home' %}">
+    {% csrf_token %}
+    <div class="mb-3">
+        <input type="text" class="form-control" name="email" placeholder="Email" required>
+    </div>
+    <div class="mb-3">
+        <input type="password" class="form-control" name="password" placeholder="Password" required>
+    </div>
+    <button type="submit" class="btn btn-secondary">Login</button>
+</form>
+</div>
+{% else %}
+<h1>Hello World</h1>
+{% endif %}
+{%endblock%}
