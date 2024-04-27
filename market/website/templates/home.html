@@ -18,6 +18,23 @@
 </form>
 </div>
 {% else %}
-<h1>Hello World</h1>
+<h1 class="display-5">Store</h1>
+{% if items %}
+<div class="row row-cols-1 row-cols-md-3 g-4">
+{% for item in items %}
+<div class="col">
+      <div class="card border-secondary mb-3">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+            <h5 class="card-title">{{item.1}}</h5>
+            <h6 class="card-subtitle mb-2 text-body-secondary"></h6>{{item.4}} remaining</h6></li>
+        <li class="list-group-item"><p class="card-text">{{item.2}}</p></li>
+        <li class="list-group-item"><a href="#" class="btn btn-secondary">Buy</a></li>
+      </ul>
+    </div>
+</div>
+{% endfor %}
+</div>
+{% endif %}
 {% endif %}
 {%endblock%}
