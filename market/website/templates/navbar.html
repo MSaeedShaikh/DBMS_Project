@@ -11,9 +11,9 @@
 				<li class="nav-item">
 					<a class="btn btn-danger" href="{% url 'logout' %}">Logout</a>
 				</li>
-				{% else %}
+				{% elif request.get_full_path != "/register/" %}
 				<li class="nav-item">
-					<a class="nav-link " href=#>Register</a>
+					<a class="nav-link " href="{% url 'register' %}">Register</a>
 				</li>
 				{% endif %}
 			</ul>

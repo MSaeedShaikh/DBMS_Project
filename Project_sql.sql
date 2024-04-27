@@ -86,3 +86,20 @@ END;$$
 
 CALL new_user('admin', 'admin', 'admin', '0300-0000000', true);
 
+CALL new_user('customer', 'customer', 'customer', '0300-0000000', false);
+
+CREATE OR REPLACE check_valid_user(
+	n_email TEXT
+)
+RETURNS INT
+LANGUAGE plpgsql
+AS $$
+BEGIN
+	SELECT u_id FROM users
+	WHERE email = n_email;
+	IF FOUND THEN
+	RETURN 1;
+	ELSE
+	RETURN 0;
+	END IF;
+END;$$
