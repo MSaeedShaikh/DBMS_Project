@@ -7,11 +7,20 @@
 		</button>
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+				{%if u_id != -1 and is_manager and request.get_full_path == "/" %}
+				<li class="nav-item">
+					<a class="nav-link" href="{% url 'new' %}">New Item</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="{% url 'records_page' %}">Purchase Records</a>
+				</li>
+				{%endif%}
 				{% if u_id != -1 %}
 				<li class="nav-item">
 					<a class="btn btn-danger" href="{% url 'logout' %}">Logout</a>
 				</li>
-				{% elif request.get_full_path != "/register/" %}
+				{% endif %}
+				{% if request.get_full_path == "/" and u_id == -1 %}
 				<li class="nav-item">
 					<a class="nav-link " href="{% url 'register' %}">Register</a>
 				</li>

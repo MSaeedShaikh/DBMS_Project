@@ -1,0 +1,26 @@
+.accordion-item{
+    border: 1px solid black;
+}
+
+.accordion-button:not(.collapsed){
+    color: white;
+    background: black;
+}
+
+
+.accordion-button:not(.collapsed)::after{
+    filter: brightness(0%) invert(100%);
+}
+
+.accordion-button:focus{
+    box-shadow: inherit;
+}
+
+a.disabled {
+    pointer-events: none;
+    cursor: default;
+}
+
+td, th {
+    text-align: center;
+}

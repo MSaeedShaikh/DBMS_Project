@@ -18,18 +18,26 @@
 </form>
 </div>
 {% else %}
-<h1 class="display-5">Store</h1>
+<h1 class="display-5"></h1>
 {% if items %}
 <div class="row row-cols-1 row-cols-md-3 g-4">
 {% for item in items %}
 <div class="col">
-      <div class="card border-secondary mb-3">
+      <div class="card bg-secondary mb-3">
       <ul class="list-group list-group-flush">
         <li class="list-group-item">
             <h5 class="card-title">{{item.1}}</h5>
             <h6 class="card-subtitle mb-2 text-body-secondary"></h6>{{item.4}} remaining</h6></li>
         <li class="list-group-item"><p class="card-text">{{item.2}}</p></li>
-        <li class="list-group-item"><a href="#" class="btn btn-secondary">Buy</a></li>
+        {% if not is_manager %}
+        <li class="list-group-item"><a href="{% url 'buy' item.0 %}" class="btn btn-outline-secondary">Buy</a></li>
+        {%else%}
+        <li class="list-group-item"><div class="btn-group" role="group">
+            <a href="{% url 'update' item.0 %}" class="btn btn-outline-primary">Update</a>
+            <a href="{% url 'delete' item.0 %}" class="btn btn-outline-danger">Delete</a>
+            </div>
+        </li>
+        {%endif%}
       </ul>
     </div>
 </div>

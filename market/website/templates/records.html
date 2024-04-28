@@ -1,0 +1,93 @@
+{%extends 'base.html'%}
+{% load static %}
+
+{%block content%}
+<h1>Records</h1>
+<br/>
+<div class="accordion" data-bs-theme="secondary" id="accordionExample">
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            Records To Be Processed
+        </button>
+      </h2>
+      <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+            {%if remaining%}
+	<table class="table table-hover">
+		<thead class="table">
+			<tr>
+				<th scope="col">Customer</th>
+				<th scope="col">Email</th>
+				<th scope="col">Phone</th>
+				<th scope="col">Item</th>
+				<th scope="col">Quantity</th>
+				<th scope="col">Created</th>
+				<th scope="col"><i>Check</i></th>
+			</tr>
+		</thead>
+		<tbody class="table-group-divider">
+			{%for remain in remaining%}
+			<tr>
+				<td>{{remain.1}}</td>
+				<td>{{remain.2}}</td>
+				<td>{{remain.3}}</td>
+				<td>{{remain.4}}</td>
+				<td>{{remain.5}}</td>
+				<td>{{remain.6}}</td>
+				<td><a href="{% url 'check_record' remain.0 %}"><img src="{% static 'checked.png' %}" alt="Check"></a></td>
+			</tr>
+			{%endfor%}
+		</tbody>
+	</table>
+    {%else%}
+    <strong>No records in this category</strong>
+	{%endif%}
+        </div>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <h2 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+          Processed Records
+        </button>
+      </h2>
+      <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+        <div class="accordion-body">
+            {%if completed%}
+            <table class="table table-hover">
+                <thead class="table">
+                    <tr>
+                        <th scope="col">Customer</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Phone</th>
+                        <th scope="col">Item</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Created</th>
+                        <th scope="col"><i><s>Check</s></i></th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    {%for item in completed%}
+                    <tr>
+                        <td>{{item.1}}</td>
+                        <td>{{item.2}}</td>
+                        <td>{{item.3}}</td>
+                        <td>{{item.4}}</td>
+                        <td>{{item.5}}</td>
+                        <td>{{item.6}}</td>
+                        <td><a class="disabled" href="#"><img src="{% static 'checked.png' %}" alt="Process"></a></td>
+                    </tr>
+                    {%endfor%}
+                </tbody>
+            </table>
+            {%else%}
+            <strong>No records in this category</strong>
+            {%endif%}
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+  <a href="{% url 'home' %}" class="btn btn-outline-secondary">Back</a>
+{% endblock %}

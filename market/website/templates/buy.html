@@ -1,0 +1,17 @@
+{%extends 'base.html'%}
+{% load static %}
+
+{%block content%}
+<div class="col-md-6 offset-md-3">
+    <h3>Buying {{item.1}}</h3>
+    <h5>In Stock: {{item.4}}</h5>
+    <br/>
+    <form method="POST" action="{% url 'buy' item.0 %}">
+        {% csrf_token %}
+        <div class="mb-3">
+            <input type="number" class="form-control" name="quantity" placeholder="How Many?" min="1" max="{{item.4}}" required>
+        </div>
+        <button type="submit" class="btn btn-outline-secondary">Buy</button>
+    </form>
+</div>
+{% endblock %}
