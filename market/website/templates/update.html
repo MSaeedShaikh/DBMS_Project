@@ -20,6 +20,7 @@
             <input type="number" class="form-control" name="stock" placeholder="Stock" value="{{item.4}}" min="1" required>
         </div>
         <button type="submit" class="btn btn-outline-primary">Update</button>
+        <a href="{% url 'image_upload' item.0 %}" class="btn btn-outline-dark">Images</a>
         <a href="{% url 'home' %}" class="btn btn-outline-secondary">Back</a>
     </form>
 </div>

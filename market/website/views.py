@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.db import connection
+import os
 
 u_id = -1
 is_manager = False
+IMAGE_TYPES = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp']
 cursor = connection.cursor()
 
 # Create your views here.
@@ -26,7 +28,15 @@ def home(request):
     else:
         cursor.execute("SELECT i_id, name, descrip, price, stock FROM items")
         all_items = cursor.fetchall()
-        return render(request, "home.html", {'u_id':u_id, 'is_manager':is_manager, 'items':all_items})
+        items = list()
+        for item in all_items:
+            item = list(item)
+            cursor.execute("SELECT * FROM get_img(%s)",[item[0]])
+            images_temp = list(cursor.fetchall())
+            images = list(zip(range(len(images_temp)), [row[1] for row in images_temp]))
+            item.append(images)
+            items.append(item)
+        return render(request, "home.html", {'u_id':u_id, 'is_manager':is_manager, 'items':items})
 
 def logout_user(request):
     global u_id
@@ -190,6 +200,70 @@ def check_record(request, pk):
             else:
                 messages.success(request, "No Such Valid Record")
                 return redirect('records_page')
+        else:
+            messages.success(request, "You are not authorized to do that")
+            return redirect('home')
+    else:
+        messages.success(request, "You must be logged in to do that")
+        return redirect('home')
+    
+def image_upload(request, pk):
+    global u_id
+    global is_manager
+    if ((u_id != -1)):
+        if(is_manager):
+            cursor.execute("SELECT name FROM items WHERE i_id=%s", [pk])
+            res = (cursor.fetchone())
+            name = res[0]
+            i_id = pk
+            if(name):
+                if request.method == 'POST':
+                    image = request.FILES['image']
+                    image_name = image.name
+                    img_type = image_name.rsplit('.', 1)[1]
+                    if img_type in IMAGE_TYPES:
+                        cursor.execute("SELECT * FROM img_upload(%s, %s)", [i_id, img_type])
+                        file_name = cursor.fetchone()[0]
+                        file_name = "market/website/static/uploads/"+file_name
+                        os.makedirs(os.path.dirname(file_name), exist_ok=True)
+                        with open(file_name, "wb+") as f:
+                            for chunk in image.chunks():
+                                f.write(chunk)
+                        messages.success(request, "Image Uploaded Successfully")
+                        return redirect('image_upload', pk = i_id)
+                    else:
+                        messages.success(request, "Invalid Image Type")
+                        return redirect('image_upload', pk = i_id)
+                else:
+                    cursor.execute("SELECT * FROM get_img(%s)", [i_id])
+                    images = cursor.fetchall()
+                    return render(request, "image_up.html", {'u_id':u_id, 'is_manager': is_manager, 'i_id': pk, 'name':name, 'images': images})
+            else:
+                messages.success(request, "No Such Item")
+                return redirect('home')
+        else:
+            messages.success(request, "You are not authorized to do that")
+            return redirect('home')
+    else:
+        messages.success(request, "You must be logged in to do that")
+        return redirect('home')
+    
+def image_delete(request, img_id, i_id):
+    global u_id
+    global is_manager
+    if ((u_id != -1)):
+        if(is_manager):
+            cursor.execute("SELECT * FROM images WHERE img_id = %s", [img_id])
+            if_exist = cursor.fetchone()[0]
+            if (if_exist != 0):
+                cursor.execute('SELECT * FROM delete_img(%s)', [img_id])
+                file_name = cursor.fetchone()[0]
+                os.remove("market/website/static/uploads/"+file_name)
+                messages.success(request, "Image Removed Successfully")
+                return redirect('image_upload', pk = i_id)
+            else:
+                messages.success(request, "No Such Image")
+                return redirect('image_upload', pk = i_id)
         else:
             messages.success(request, "You are not authorized to do that")
             return redirect('home')

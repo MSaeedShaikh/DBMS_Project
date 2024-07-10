@@ -188,3 +188,56 @@ RETURN if_exist;
 END;$$
 
 SELECT * FROM check_record(1);
+
+CREATE TABLE images(
+	img_id SERIAL PRIMARY KEY,
+	i_id INT,
+	img_name TEXT,
+	FOREIGN KEY(I_ID) REFERENCES items(i_id)
+);
+
+CREATE FUNCTION img_upload(
+	_i_id integer,
+	_exten text)
+RETURNS text
+LANGUAGE 'plpgsql'
+AS $$
+DECLARE
+	_img_name TEXT;
+	_img_id INT;
+BEGIN
+	INSERT INTO images(i_id) VALUES (_i_id) RETURNING img_id INTO _img_id;
+	_img_name := CONCAT(_IMG_ID, '.', _exten);
+	UPDATE images SET img_name = _img_name WHERE img_id  = _img_id;
+	RETURN _img_name;
+END;$$
+
+CREATE FUNCTION get_img(
+	_i_id INT
+)
+RETURNS TABLE(
+	_img_id INT,
+	_img_name TEXT
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+RETURN QUERY
+SELECT img_id, img_name FROM images WHERE i_id = _i_id;
+END;$$
+
+SELECT * FROM get_img(2);
+
+CREATE FUNCTION delete_img(
+	_img_id INT
+)
+RETURNS TEXT
+LANGUAGE plpgsql
+AS $$
+DECLARE
+	_img_name TEXT;
+BEGIN
+	SELECT img_name FROM images INTO _img_name WHERE img_id = _img_id;
+	DELETE FROM images WHERE img_id = _img_id;
+	RETURN _img_name;
+END;$$

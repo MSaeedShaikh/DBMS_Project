@@ -11,4 +11,6 @@ urlpatterns = [
     path('new/', views.new_item, name='new'),
     path('records/', views.view_records, name='records_page'),
     path('check/<int:pk>', views.check_record, name='check_record'),
+    path('image_up/<int:pk>', views.image_upload, name='image_upload'),
+    path('image_del/<int:i_id>/<int:img_id>', views.image_delete, name='image_delete'),
 ]
