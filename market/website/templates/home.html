@@ -27,13 +27,13 @@
       <ul class="list-group list-group-flush">
         {%if item.5%}
         <li class="list-group-item">
-            <div id="carouselExampleIndicators" class="carousel slide">
+            <div id="carouselIndicator{{item.0}}" class="carousel slide">
             <div class="carousel-indicators">
               {% for img in item.5 %}
               {%if img.0 == 0 %}
-              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true"></button>
+              <button type="button" data-bs-target="#carouselIndicator{{item.0}}" data-bs-slide-to="0" class="active" aria-current="true"></button>
               {% else %}
-              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{img.0}}"></button>
+              <button type="button" data-bs-target="#carouselIndicator{{item.0}}" data-bs-slide-to="{{img.0}}"></button>
               {% endif %}
               {% endfor %}
             </div>
@@ -50,11 +50,11 @@
               {% endif %}
               {% endfor %}
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselIndicator{{item.0}}" data-bs-slide="prev">
               <span class="carousel-control-prev-icon" aria-hidden="true"></span>
               <span class="visually-hidden">Previous</span>
             </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselIndicator{{item.0}}" data-bs-slide="next">
               <span class="carousel-control-next-icon" aria-hidden="true"></span>
               <span class="visually-hidden">Next</span>
             </button>
